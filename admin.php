@@ -37,7 +37,7 @@ if (ISSET($_POST['delete']) && ISSET($_POST['del_id'])
 	if(!$result){
 		$del_msg = "Coundn't Delete entry. Sorry";
 	} else {
-		$del_msg = "Deleted user $del_id, $del_name. May god rest his soul.";
+		$del_msg = "Deleted user $del_id, $del_name. May god rest his or her soul.";
 	}
 } else {
 	$del_msg = "";

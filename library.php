@@ -1,11 +1,24 @@
 <?php
 
+
+function is_user($conn, $user) {
+	$query = "SELECT * FROM people WHERE name='$user'";
+	$result = $conn->query($query);
+	if ($result->num_rows > 0){
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+function is_admin($name) {
+	return in_array("Tommy", "Pat");
+}
 function msqli_ferror($conn) 
 {
 	$msg = mysqli_error($conn);
 
 	echo <<<_END
-Unfortunatly somehing has gone wrong with the requested task.
+Unfortunatly something has gone wrong with the requested task.
 The error was:
 	<p>$msg</p>
 Feel free to try again, or email our <a href="mailto:support@iterated.me">support staff</a>. Have a nice day!
@@ -31,13 +44,11 @@ $prop_types = array("substrate", "protein", "dessert", "side", "snack", "fruit",
 foreach($prop_types as $prop) {
 	if($string == $prop) $is = true;	
 }
-return $is;
-}
 
 function type_list() 
 {
 $output = "";
-$prop_types = array("substrate", "protein", "dessert", "side", "snack", "fruit", "drink", "vegetable", "condiment", "cheese");
+$prop_types = get_types();
 foreach($prop_types as $type){
 	$output = $output . $type . " ";	
 }

@@ -13,21 +13,21 @@ $result = $conn->query($query);
 if (!$result) echo "Couldn't get the menu: " . $conn->error;
 $num_items = $result->num_rows;
 
-// PROCESS ORDERS from POST
+// PROCESS UPDATES from POST
 if (isset($_POST['submit'])) {
-if (!empty($_POST['contents']) ) {
-	$active = new Order($name, date('Y-m-d', 
-			time() + 60*60*24*$_POST['when'] ) );
-	$active->submit($conn, $_POST['contents']);
-	$ord_feed = "Submitted order " . $active->id();
-} else {
-	$ord_feed = "Did you order anything?";
-}
+	var_dump($_POST['in_stock']);
+	$ord_feed = "Updated";
+	foreach ($_POST['in_stock'] as $time) {
+		$query = "UPDATE menuniv SET stock=TRUE WHERE pid=$item";
+		$result = $conn->query($query);
+		var_dump($result);
+		ord_feed += " " . $result[name];
+	}
 } else {
 	$ord_feed = "";
 }
 
-//POPULATE THE MENU BY TYPE
+//POPULATE THE MENU BY TYPE and STOCK
 $types = get_types();
 foreach($types as $type)
 {
@@ -52,11 +52,12 @@ echo file_get_contents("kitchen_header.html");
 echo file_get_contents("nav.html");
 echo <<<_END
 <main>
-<h2>Make Your Order!</h2>
-<p>We have <b>$num_items</b> menu items!</p>
+<h2>What's in stock</h2>
+<p>We have <b>$num_items</b> items in stock!</p>
 <h4 id='msg'>$ord_feed</h4>
+<p>Checked items are stocked. Check or uncheck them accordingly. To add an item to the universal menu, go to <a href='items_props.php'>Update the Menu</a>.
 
-<form action='make_order.php' method='post'> 
+<form action='update_stock.php' method='post'> 
 <table> 
 <tr>
 _END;
@@ -74,28 +75,27 @@ for($j = 0 ; $j < $longest; ++$j) {
 		$menu[$type]->data_seek($j);
 		$row = $menu[$type]->fetch_array(MYSQLI_ASSOC);
 		echo "<td>$row[name]";
-		if (!empty($row[name])) echo "<input type='checkbox' name='contents[]' value='$row[pid]'>";
+		if (!empty($row[name]) && isset($_COOKIE['user'])) {
+			if( $row[stock] ) {
+				echo "<input type='checkbox' 
+					name='in_stock[]' value='$row[pid]' checked>";
+			} else {
+				echo "<input type='checkbox' 
+					name='in_stock[]' value='$row[pid]'>";
+			}
+		}
 		echo "</td>";
 	}
 	echo "</tr>";
 }
 
-// Date input
-echo<<<_END
-	<tr>
-		<td><input type='checkbox' name='when' 
-				value='0' label='today'>today</td>
-		<td><input type='checkbox' name='when' 
-				value='1' label='tomorrow'>tomorrow</td>
-	</tr>
-</table>
-_END;
+echo "</table>";
 
 // Display submit only when logged in
 if (isset($_COOKIE['user'])) {
-	echo "<input type='submit' name='submit' value='Place Order'></form>";
+	echo "<input type='submit' name='submit' value='Update Menu'></form>";
 } else {
-	echo "</p><a href='signin.php'>Sign in</a> to order</p>";
+	echo "</p><a href='signin.php'>Sign in</a> to make changes to the menu</p>";
 }
 
 

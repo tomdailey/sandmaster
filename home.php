@@ -26,7 +26,7 @@ echo <<<_END
 <p>Our mission is to remove the hassle on those mornings you just want to get to the beach, and to learn some seriously dope web developement in the process. So hold onto your strapless bikinis, because nothing will stop us at Sand Masters! (if you have a problem with the phrasing there, you can <a href='legal.html'>take it up with legal</a>)</p>
 <h3>Get Started!</h3>
 <p>It's easy to use! First, <a href="signup.php">make an account</a>, then head over to <a href="window.php">the window</a> to look at the menu, make, and track your orders.</p>
-<p>If you'd like to fill an order, update the stock, or otherwise look behind the scenes, head over to <a href="kitchen.php">the kitchen</a>.</p>
+<p>If you'd like to fill an order, update the stock, or otherwise look behind the scenes, check out <a href="kitchen.php">the kitchen</a>.</p>
 
 </main>
 _END;

@@ -5,6 +5,12 @@
 #msg {
 	color: #236B8E;
 }
+#subtitle {
+	text-align: right;
+}
+#title {
+	text-align: center;
+}
 ul {
 	list-style-type: none;
 }
