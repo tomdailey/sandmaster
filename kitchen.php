@@ -5,13 +5,18 @@ $conn = new mysqli($hn, $un, $pw, $db);
 
 if ($conn->connect_error) mysqli_ferror($conn);
 
+// GET Kitchen STATS
 $query = "SELECT * FROM orders WHERE DATE(time) = CURDATE()";
 $result = $conn->query($query);
 if (!$result) echo "Couldn't get today's orders: " . $conn->error;
-
 $num_orders = $result->num_rows;
-$num_items = 5;
 
+$query = "SELECT * FROM menuniv WHERE stock = 1";
+$result = $conn->query($query);
+	if (!$result) echo "Couldn't get today's stock: " . $conn->error;
+$num_items = $result->num_rows;
+
+// BEGIN PAGE
 echo "<html>";
 echo file_get_contents("kitchen_head.html");
 echo "<body>";

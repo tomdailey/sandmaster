@@ -8,7 +8,7 @@ if ($conn->connect_error) mysqli_ferror($conn);
 if( isset($_COOKIE['user'])) $name = $_COOKIE['user'];
 
 // Get number of menu items
-$query = "SELECT * FROM menuniv";
+$query = "SELECT * FROM menuniv WHERE stock=TRUE";
 $result = $conn->query($query);
 if (!$result) echo "Couldn't get the menu: " . $conn->error;
 $num_items = $result->num_rows;
@@ -31,7 +31,7 @@ if (!empty($_POST['contents']) ) {
 $types = get_types();
 foreach($types as $type)
 {
-	$query = "SELECT * FROM menuniv WHERE type='$type'";
+	$query = "SELECT * FROM menuniv WHERE type='$type' AND stock=TRUE";
 	$menu[$type] = $conn->query($query);
 	if (!$menu[$type]) echo "Couldn't get the menu for $type: " . $conn->error;
 }
@@ -74,7 +74,7 @@ for($j = 0 ; $j < $longest; ++$j) {
 		$menu[$type]->data_seek($j);
 		$row = $menu[$type]->fetch_array(MYSQLI_ASSOC);
 		echo "<td>$row[name]";
-		if (!empty($row[name])) echo "<input type='checkbox' name='contents[]' value='$row[pid]'>";
+		if (!empty($row['name'])) echo "<input type='checkbox' name='contents[]' value='$row[pid]'>";
 		echo "</td>";
 	}
 	echo "</tr>";

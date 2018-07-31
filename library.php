@@ -1,5 +1,29 @@
 <?php
+function print_ord($conn, $ord) {
+	$query = "SELECT * FROM menspec WHERE oid='$ord[oid]'";
+	$result = $conn->query($query);
+		if (!$result) err($query);
+	echo<<<_END
+	<li>$ord[person]</li>
+	<li>id $ord[oid] for $ord[whn]</li>
+	<li>with: $result->num_rows ingredients!
+_END;
+	for ($j = 0; $j < $result->num_rows; $j++) {
+		$result->data_seek($j);
+		$row = $result->fetch_array(MYSQL_ASSOC);
+		echo pid_to_item($row[pid]);
+	}	
+	echo "</li>";
+}
 
+function pid_to_item($conn, $pid) {
+	$query = "SELECT * FROM menuniv WHERE pid='$pid'";
+	$result = $conn->query($query);
+		if(!$result) mysql_ferror($query);
+	var_dump($result->data_seek('0'));
+	$row = $result->fetch_array(MYSQL_ASSOC);
+	return $row[name];
+}
 
 function is_user($conn, $user) {
 	$query = "SELECT * FROM people WHERE name='$user'";
@@ -43,6 +67,7 @@ $is = false;
 $prop_types = array("substrate", "protein", "dessert", "side", "snack", "fruit", "drink", "vegetable", "condiment", "cheese");
 foreach($prop_types as $prop) {
 	if($string == $prop) $is = true;	
+}
 }
 
 function type_list() 

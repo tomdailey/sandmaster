@@ -11,17 +11,23 @@ if( isset($_COOKIE['user'])) $name = $_COOKIE['user'];
 $query = "SELECT * FROM menuniv";
 $result = $conn->query($query);
 if (!$result) echo "Couldn't get the menu: " . $conn->error;
+$num_items_total = $result->num_rows;
+$query = "SELECT * FROM menuniv WHERE stock=TRUE";
+$result = $conn->query($query);
+if (!$result) echo "Couldn't get the menu: " . $conn->error;
 $num_items = $result->num_rows;
 
 // PROCESS UPDATES from POST
 if (isset($_POST['submit'])) {
-	var_dump($_POST['in_stock']);
-	$ord_feed = "Updated";
-	foreach ($_POST['in_stock'] as $time) {
+	$ord_feed = "Updated Stock";
+	for($j = 0; $j < $num_items_total; $j++) {
+		$query = "UPDATE menuniv SET stock=FALSE WHERE stock = 1 OR 2";
+		$result = $conn->query($query);
+		if (!$result) echo "Coundn't default the menu: " . $conn->error;
+	}
+	foreach ($_POST['in_stock'] as $item) {
 		$query = "UPDATE menuniv SET stock=TRUE WHERE pid=$item";
 		$result = $conn->query($query);
-		var_dump($result);
-		ord_feed += " " . $result[name];
 	}
 } else {
 	$ord_feed = "";

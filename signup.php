@@ -4,6 +4,28 @@ require_once 'login.php';
 $conn = new mysqli($hn, $un, $pw, $db);
 if ($conn->connect_error) mysqli_ferror($conn);
 
+// If already signed in update the variable
+if (isset($_COOKIE['user'])) {
+	$name = $_COOKIE['user'];
+	echo "<html>";
+	echo file_get_contents("header.html");
+	echo "<body>";
+	echo file_get_contents("head.html");
+	echo file_get_contents("nav.html");
+	echo <<<_END
+<main>
+<h3 id='msg'>You're already signed in, $name!</h3>
+</main>
+
+_END;
+
+	echo file_get_contents("footer.html");
+
+	echo "</html>";
+} else {
+
+// Sign in, if name was submitted and is user
+
 if(isset($_POST['agree'])) {
 	if ($_POST['agree'] != 'on') {
 		$msg = "You must agree to the terms and conditions";
@@ -27,6 +49,7 @@ if (!empty($_POST['name']) &&
 		$msg = "Query failed: $query <br> $conn->error <br>";
 	} else {
 		$msg = "Welcome, $name!";
+		setcookie('user', $name, time() + 60 * 60 * 24 * 7, '/');
 	}
 } elseif( !is_email($_POST['email'] )) {
 	$msg = "That's not a valid email";
@@ -49,7 +72,7 @@ echo <<<_END
 		<li>Email:<br> <input type="text" name="email"></li>
 	</ul>
 		I Agree to our <a href='legal.html'>Terms and Conditions</a> <input type="checkbox" name="agree" checked="checked">
-		<h4 id='msg'>$msg$mys</h4>
+		<h4 id='msg'>$msg</h4>
 		<input type="submit" name="try" value="Sign up">
 	</form>
 </main>
@@ -59,4 +82,5 @@ _END;
 echo file_get_contents("footer.html");
 
 echo "</html>"
+} // end the signed in else case
 ?>

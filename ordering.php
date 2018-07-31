@@ -23,11 +23,10 @@ function id() {
 function submit($conn, $contents) {
 
 	//ADD ORDER TO DATABASE
-	$query = "INSERT INTO orders(person, whn, status) 
-				VALUES('$this->person', '$this->when', 'incomplete')";
+	$query = "INSERT INTO orders(person, whn) 
+				VALUES('$this->person', '$this->when')";
 	$result = $conn->query($query);
 	if($result === TRUE) {
-		$this->status = 'incomplete';
 		$this->oid = $conn->insert_id;
 		//ASSOCIATE ORDER WITH CONTENTS
 		foreach($contents as $item){
